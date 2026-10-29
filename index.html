@@ -289,7 +289,10 @@ footer::before{content:'';width:8px;height:8px;border-radius:50%;background:var(
 .btn2:hover{border-color:rgba(255,255,255,.3)}
 .btn2.pri{border:0;background:linear-gradient(90deg,var(--acc1),var(--acc2));color:#fff;box-shadow:0 10px 30px rgba(99,102,241,.35)}
 .btn2.pri:hover{transform:translateY(-1px)}
-.scriptpre{max-height:230px;overflow:auto;background:rgba(0,0,0,.45);border:1px solid var(--line);border-radius:14px;padding:14px 16px;font:11.5px/1.55 'Courier New',monospace;color:#9fb0d0;white-space:pre;margin-top:14px}
+.scriptpre{max-height:230px;overflow:auto;background:rgba(0,0,0,.45);border:1px solid var(--line);border-radius:14px;padding:14px 16px;font:11.5px/1.55 'Courier New',monospace;color:#9fb0d0;white-space:pre-wrap;word-break:break-word;margin-top:14px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.2) transparent}
+.scriptpre::-webkit-scrollbar{width:8px;height:8px}
+.scriptpre::-webkit-scrollbar-thumb{background:rgba(255,255,255,.18);border-radius:8px}
+.scriptpre::-webkit-scrollbar-track{background:transparent}
 .setup-inp{width:100%;box-sizing:border-box;padding:13px 15px;border-radius:12px;border:1px solid var(--line2);background:rgba(0,0,0,.3);color:var(--txt);font:14px Inter;margin-top:10px;outline:none;transition:.2s}
 .setup-inp:focus{border-color:var(--acc2)}
 .testmsg{font-size:13px;margin-top:10px;min-height:18px}
@@ -326,7 +329,7 @@ footer::before{content:'';width:8px;height:8px;border-radius:50%;background:var(
     <div class="feat-card"><div class="fi">&#10133;</div><h3>Add anything</h3><p>Cash spends and income the alerts never catch go in through a clean quick-add, with CSV export when you want a copy.</p></div>
   </div>
   <div class="how" id="howland">
-    <h2>Setup, <span class="grad">once</span>, about three minutes</h2>
+    <h2>Set up <span class="grad">once</span>, in about three minutes</h2>
     <div class="how-grid">
       <div class="how-card"><span class="n">STEP 01</span><h3>Create your feed</h3><p>Paste one small script into Google Apps Script and deploy it. It watches your own Gmail for bank alerts. MoneyLens hands you the script.</p></div>
       <div class="how-card"><span class="n">STEP 02</span><h3>Connect it</h3><p>Paste the web-app URL into MoneyLens. It tests the connection live and counts what it already finds.</p></div>
@@ -363,6 +366,9 @@ footer::before{content:'';width:8px;height:8px;border-radius:50%;background:var(
           <li>Delete the sample code, <b>paste the script below</b>.</li>
           <li><b>Deploy &rarr; New deployment &rarr; Web app</b>. Execute as: <b>Me</b>. Who has access: <b>Anyone</b>.</li>
           <li>Copy the <b>Web app URL</b> it gives you.</li>
+        </ul>
+        <p style="margin-top:10px">About <b>Anyone</b>: the web-app URL is an unguessable private key only you hold, and the script reads nothing but your own bank-alert emails.</p>
+        <ul style="display:none">
         </ul>
         <button class="btn2" id="copyScript" style="margin-top:14px">Copy setup script</button>
         <div class="scriptpre" id="scriptPre"></div>
