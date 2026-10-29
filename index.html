@@ -170,8 +170,8 @@ canvas.chart{width:100%;height:270px;display:block}
 .empty .e{font-size:36px;margin-bottom:10px;opacity:.75}
 
 /* untagged quick-tag */
-.tx.untagged{border-left:2px solid var(--acc1);background:linear-gradient(90deg,rgba(139,124,255,.11),transparent 60%)}
-.qtag{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line2)}
+.tx.untagged{border-left:2px solid var(--acc1);background:linear-gradient(90deg,rgba(139,124,255,.11),transparent 60%);flex-wrap:wrap}
+.qtag{flex:1 1 100%;display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line2)}
 .ql{font-size:10px;color:var(--acc2);font-weight:800;letter-spacing:1.4px;text-transform:uppercase}
 .qtag .chip{padding:5px 11px;font-size:11.5px}
 .qin{background:var(--surface);border:1px solid var(--line);border-radius:11px;color:var(--txt);padding:7px 11px;font-size:12.5px;font-family:inherit;min-width:160px;flex:1;outline:none;transition:.2s}
@@ -513,7 +513,7 @@ footer::before{content:'';width:8px;height:8px;border-radius:50%;background:var(
 <div id="toast"></div>
 <div id="tip" style="position:fixed;z-index:150;background:rgba(18,23,40,.95);border:1px solid var(--line2);padding:7px 12px;border-radius:99px;font-size:12px;font-weight:600;pointer-events:none;opacity:0;transition:opacity .15s;white-space:nowrap"></div>
 
-<footer>Auto-synced from your Gmail bank alerts &middot; everything stays in this browser &middot; <a class="flink" id="lnkSetup" href="#">setup</a> &middot; <a class="flink" id="lnkHome" href="#">home</a></footer>
+<footer>Auto-synced from your Gmail bank alerts &middot; everything stays in this browser &middot; <button class="flink" id="alertBtn" style="background:none;border:0;padding:0;cursor:pointer;font:inherit">turn on alerts</button> &middot; <a class="flink" id="lnkSetup" href="#">setup</a> &middot; <a class="flink" id="lnkHome" href="#">home</a></footer>
 </div>
 
 <script>
@@ -641,6 +641,23 @@ function mergeTxns(incoming,quiet,markReview){
   if(added){renderAll();toast('Synced '+added+' new transaction'+(added===1?'':'s')+' · tag them below')}
   else if(!quiet) toast('Nothing new to sync');
   return added;
+}
+function notifyNew(list){
+  const fresh=(list||[]).filter(t=>t&&t.review);
+  if(!fresh.length||!('Notification' in window)||Notification.permission!=='granted')return;
+  try{
+    if(fresh.length>3){new Notification(fresh.length+' new transactions need tags',{body:'Open MoneyLens to tag them',tag:'mlbatch'});return}
+    fresh.forEach(t=>{
+      const n=new Notification((t.note||'New transaction')+' \u00b7 '+(t.type==='income'?'+':'\u2212')+fmt(t.amount),{body:'Just synced from your alerts. Tap to tag it.',tag:'ml'+t.id});
+      n.onclick=()=>{try{window.focus()}catch(e){}show('app');state.ui.untagged=true;const fu=$('fUntagged');if(fu)fu.classList.add('on');renderList();const el=$('txList');if(el)el.scrollIntoView({behavior:'smooth'});n.close()};
+    });
+  }catch(e){}
+}
+function syncAlertBtn(){
+  const b=$('alertBtn');if(!b)return;
+  if(!('Notification' in window)){b.style.display='none';return}
+  const pn=Notification.permission;
+  b.textContent=pn==='granted'?'alerts on':(pn==='denied'?'alerts blocked':'turn on alerts');
 }
 function load(){
   try{
@@ -924,6 +941,15 @@ function init(){
   const fc=$('fCat');[...INC_CATS,...EXP_CATS].forEach(k=>{const o=document.createElement('option');o.value=k;o.textContent=CATS[k].i+' '+CATS[k].l;fc.appendChild(o)});
   syncMonthUI();renderAll();
   if(SYNC_URL){pullSync();setInterval(pullSync,120000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)pullSync()})}
+  const ab=$('alertBtn');
+  if(ab)ab.onclick=()=>{
+    if(!('Notification' in window)){toast('This browser does not support alerts');return}
+    const pn=Notification.permission;
+    if(pn==='granted'){toast('Alerts are on \u2014 you get pinged when a new transaction lands');return}
+    if(pn==='denied'){toast('Blocked \u2014 allow notifications for this site in your browser settings');return}
+    Notification.requestPermission().then(np=>{syncAlertBtn();if(np==='granted')toast('Alerts on \u2014 pinged each time a new transaction lands')});
+  };
+  syncAlertBtn();
 
   $('prevM').onclick=()=>{state.ui.month=monthShift(state.ui.month,-1);syncMonthUI();renderAll()};
   $('nextM').onclick=()=>{state.ui.month=monthShift(state.ui.month,1);syncMonthUI();renderAll()};
@@ -995,7 +1021,8 @@ function init(){
     if(!SYNC_URL)return;
     fetch(SYNC_URL+'?t='+Date.now()).then(r=>r.json()).then(j=>{
       const list=Array.isArray(j)?j:(j.transactions||[]);
-      if(mergeTxns(list,true,true))save();
+      const known=new Set(state.tx.map(t=>t.id));
+      if(mergeTxns(list,true,true)){save();notifyNew(list.filter(t=>t&&t.id&&!known.has(t.id)))}
     }).catch(()=>{});
   }
   $('importFile').onchange=e=>{
