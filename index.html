@@ -236,11 +236,157 @@ footer::before{content:'';width:8px;height:8px;border-radius:50%;background:var(
   #addBtn{display:none}
   main{padding-top:24px;gap:36px}
 }
-</style>
+
+/* ---- views / landing / setup ---- */
+.view{display:none}
+.view.on{display:block}
+.land-nav{position:sticky;top:0;z-index:60;display:flex;align-items:center;justify-content:space-between;padding:16px 24px;backdrop-filter:blur(14px);background:rgba(5,7,15,.6);border-bottom:1px solid var(--line)}
+.land-cta{padding:10px 20px;border-radius:999px;border:0;cursor:pointer;font:600 13.5px Inter;color:#fff;background:linear-gradient(90deg,var(--acc1),var(--acc2));box-shadow:0 10px 30px rgba(99,102,241,.35);transition:.25s}
+.land-cta:hover{transform:translateY(-2px)}
+.hero{max-width:860px;margin:0 auto;padding:88px 22px 30px;text-align:center}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font:600 11px Inter;letter-spacing:.18em;text-transform:uppercase;color:var(--acc2);background:rgba(34,211,238,.08);border:1px solid rgba(34,211,238,.25);padding:7px 14px;border-radius:999px}
+.hero h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(38px,6vw,62px);line-height:1.06;letter-spacing:-.02em;margin:22px 0 0}
+.grad{background:linear-gradient(90deg,var(--acc1),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.lede{color:var(--mut);font-size:17.5px;line-height:1.65;max-width:600px;margin:20px auto 0}
+.cta-row{display:flex;gap:12px;justify-content:center;align-items:center;margin-top:30px;flex-wrap:wrap}
+.cta{display:inline-flex;align-items:center;gap:10px;padding:15px 30px;border-radius:999px;border:0;cursor:pointer;font:600 15px Inter;color:#fff;background:linear-gradient(90deg,var(--acc1),var(--acc2));box-shadow:0 14px 44px rgba(99,102,241,.4);transition:.25s}
+.cta:hover{transform:translateY(-2px);box-shadow:0 18px 54px rgba(99,102,241,.5)}
+.ghostlink{font:600 14px Inter;color:var(--mut);text-decoration:none;padding:12px 18px;border-radius:999px;border:1px solid var(--line2);transition:.2s}
+.ghostlink:hover{color:var(--txt);border-color:rgba(255,255,255,.3)}
+.feat-grid{max-width:1060px;margin:64px auto 0;padding:0 22px;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+.feat-card{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:24px;transition:.25s}
+.feat-card:hover{border-color:var(--line2);transform:translateY(-3px);background:var(--surface2)}
+.fi{width:42px;height:42px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:19px;background:var(--surface2);border:1px solid var(--line);margin-bottom:14px}
+.feat-card h3{font-family:'Space Grotesk',sans-serif;font-size:16.5px;margin-bottom:7px}
+.feat-card p{color:var(--mut);font-size:13.5px;line-height:1.6}
+.how{max-width:920px;margin:76px auto 8px;padding:0 22px}
+.how h2{font-family:'Space Grotesk',sans-serif;font-size:clamp(24px,3.4vw,32px);text-align:center;letter-spacing:-.01em}
+.how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:28px}
+.how-card{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:24px;position:relative}
+.how-card .n{font:700 13px 'Space Grotesk';color:var(--acc2);letter-spacing:.1em}
+.how-card h3{font-family:'Space Grotesk',sans-serif;font-size:16px;margin:10px 0 6px}
+.how-card p{color:var(--mut);font-size:13.5px;line-height:1.6}
+.land-final{max-width:760px;margin:80px auto 0;padding:44px 30px;text-align:center;background:var(--surface);border:1px solid var(--line);border-radius:28px}
+.land-final h2{font-family:'Space Grotesk',sans-serif;font-size:clamp(24px,3.6vw,34px);letter-spacing:-.01em}
+.land-final p{color:var(--mut);margin:10px 0 0}
+.land-foot{max-width:1060px;margin:64px auto 0;padding:22px;color:var(--mut2);font-size:12.5px;text-align:center;border-top:1px solid var(--line)}
+.setup-wrap{max-width:660px;margin:56px auto;padding:0 20px 80px}
+.setup-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.setup-top .logo{cursor:default}
+.steps-dots{display:flex;gap:7px;margin-bottom:24px}
+.sdot{height:4px;flex:1;border-radius:4px;background:rgba(255,255,255,.12);transition:.3s}
+.sdot.on{background:linear-gradient(90deg,var(--acc1),var(--acc2))}
+.setup-card{background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:32px 30px}
+.step{display:none}
+.step.on{display:block;animation:fadein .35s ease}
+@keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.step h2{font-family:'Space Grotesk',sans-serif;font-size:23px;letter-spacing:-.01em;margin-bottom:10px}
+.step p{color:var(--mut);font-size:14px;line-height:1.65}
+.step ul{margin:12px 0 0;padding-left:18px;color:var(--mut);font-size:13.5px;line-height:1.8}
+.step ul b{color:var(--txt);font-weight:600}
+.setup-actions{display:flex;justify-content:space-between;align-items:center;margin-top:26px}
+.btn2{padding:12px 22px;border-radius:12px;border:1px solid var(--line2);background:rgba(255,255,255,.06);color:var(--txt);cursor:pointer;font:600 13.5px Inter;transition:.2s}
+.btn2:hover{border-color:rgba(255,255,255,.3)}
+.btn2.pri{border:0;background:linear-gradient(90deg,var(--acc1),var(--acc2));color:#fff;box-shadow:0 10px 30px rgba(99,102,241,.35)}
+.btn2.pri:hover{transform:translateY(-1px)}
+.scriptpre{max-height:230px;overflow:auto;background:rgba(0,0,0,.45);border:1px solid var(--line);border-radius:14px;padding:14px 16px;font:11.5px/1.55 'Courier New',monospace;color:#9fb0d0;white-space:pre;margin-top:14px}
+.setup-inp{width:100%;box-sizing:border-box;padding:13px 15px;border-radius:12px;border:1px solid var(--line2);background:rgba(0,0,0,.3);color:var(--txt);font:14px Inter;margin-top:10px;outline:none;transition:.2s}
+.setup-inp:focus{border-color:var(--acc2)}
+.testmsg{font-size:13px;margin-top:10px;min-height:18px}
+.ok{color:var(--inc)}.err{color:var(--exp)}
+.done-ico{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;background:linear-gradient(135deg,rgba(139,124,255,.25),rgba(34,211,238,.25));border:1px solid var(--line2);margin:6px auto 16px}
+.flink{color:var(--mut2);text-decoration:none;border-bottom:1px dotted var(--mut2)}
+.flink:hover{color:var(--txt)}
+@media(max-width:640px){
+  .hero{padding-top:64px}
+  .how-grid{grid-template-columns:1fr}
+  .setup-card{padding:24px 20px}
+  .land-nav{padding:13px 16px}
+}
+
 </head>
 <body>
 <div class="bg-orb b1"></div><div class="bg-orb b2"></div><div class="bg-orb b3"></div>
 
+<section id="landing" class="view">
+  <nav class="land-nav"><div class="logo">Money<span>Lens</span></div><button class="land-cta" id="ctaStart">Get started</button></nav>
+  <div class="hero">
+    <span class="eyebrow">Auto-synced personal finance</span>
+    <h1>Your bank alerts,<br>turned into a <span class="grad">money story</span></h1>
+    <p class="lede">MoneyLens reads the transaction alerts already sitting in your Gmail and builds a live dashboard from them: balance, monthly insights, payday budgets and recurring bills. Nothing to type, nothing to import.</p>
+    <div class="cta-row"><button class="cta" id="ctaStart2">Get started &rarr;</button><a class="ghostlink" href="#howland">See how it works</a></div>
+  </div>
+  <div class="feat-grid">
+    <div class="feat-card"><div class="fi">&#128225;</div><h3>Live auto-sync</h3><p>A private feed sweeps your Gmail every five minutes and files every bank alert as a transaction. Exactly once, no duplicates.</p></div>
+    <div class="feat-card"><div class="fi">&#127991;</div><h3>Tag in two taps</h3><p>New transactions arrive untagged. Tap a category chip or type your own, right there in the list.</p></div>
+    <div class="feat-card"><div class="fi">&#127919;</div><h3>Salary-day budgets</h3><p>Budget cycles that start on payday, not the 1st. One tap applies a 50/30/20 split from your real income.</p></div>
+    <div class="feat-card"><div class="fi">&#128260;</div><h3>Recurring radar</h3><p>Payments that repeat get spotted automatically, with cadence and the next due date highlighted.</p></div>
+    <div class="feat-card"><div class="fi">&#128274;</div><h3>Private by design</h3><p>Everything stays in your browser. The feed serves only your own alert emails, and you own the script that powers it.</p></div>
+    <div class="feat-card"><div class="fi">&#10133;</div><h3>Add anything</h3><p>Cash spends and income the alerts never catch go in through a clean quick-add, with CSV export when you want a copy.</p></div>
+  </div>
+  <div class="how" id="howland">
+    <h2>Setup, <span class="grad">once</span>, about three minutes</h2>
+    <div class="how-grid">
+      <div class="how-card"><span class="n">STEP 01</span><h3>Create your feed</h3><p>Paste one small script into Google Apps Script and deploy it. It watches your own Gmail for bank alerts. MoneyLens hands you the script.</p></div>
+      <div class="how-card"><span class="n">STEP 02</span><h3>Connect it</h3><p>Paste the web-app URL into MoneyLens. It tests the connection live and counts what it already finds.</p></div>
+      <div class="how-card"><span class="n">STEP 03</span><h3>Watch it flow</h3><p>Every new alert becomes a transaction within minutes. Tag them in two taps and the dashboard, budgets and radar build themselves.</p></div>
+    </div>
+  </div>
+  <div class="land-final">
+    <h2>Ready to see where the money went?</h2>
+    <p>One-time setup, then it runs itself. Your data never leaves this browser.</p>
+    <div class="cta-row"><button class="cta" id="ctaStart3">Start setup &rarr;</button></div>
+  </div>
+  <div class="land-foot">MoneyLens &middot; built for the alerts you already get</div>
+</section>
+
+<section id="setup" class="view">
+  <div class="setup-wrap">
+    <div class="setup-top"><div class="logo">Money<span>Lens</span></div></div>
+    <div class="steps-dots"><div class="sdot on"></div><div class="sdot"></div><div class="sdot"></div><div class="sdot"></div></div>
+    <div class="setup-card">
+      <div class="step on">
+        <h2>Welcome to MoneyLens</h2>
+        <p>Three minutes, one time. MoneyLens turns the bank-alert emails your banks already send you into a live, private money dashboard.</p>
+        <ul>
+          <li><b>Automatic:</b> every new transaction lands by itself, within minutes of the alert.</li>
+          <li><b>Exact:</b> each alert is filed exactly once, keyed to the email itself.</li>
+          <li><b>Yours:</b> the feed is a script in your own Google account. Data stays in this browser.</li>
+        </ul>
+      </div>
+      <div class="step">
+        <h2>Create your feed</h2>
+        <p>This one script is the whole engine. It reads only bank-alert emails and serves them to this page.</p>
+        <ul>
+          <li>Open <b>script.google.com</b> &rarr; <b>New project</b>.</li>
+          <li>Delete the sample code, <b>paste the script below</b>.</li>
+          <li><b>Deploy &rarr; New deployment &rarr; Web app</b>. Execute as: <b>Me</b>. Who has access: <b>Anyone</b>.</li>
+          <li>Copy the <b>Web app URL</b> it gives you.</li>
+        </ul>
+        <button class="btn2" id="copyScript" style="margin-top:14px">Copy setup script</button>
+        <div class="scriptpre" id="scriptPre"></div>
+      </div>
+      <div class="step">
+        <h2>Connect the feed</h2>
+        <p>Paste the Web app URL from the last step. MoneyLens tests it live before saving.</p>
+        <input class="setup-inp" id="feedUrl" type="url" placeholder="https://script.google.com/macros/s/.../exec">
+        <div class="testmsg" id="testMsg"></div>
+        <button class="btn2" id="testConn" style="margin-top:6px">Test connection</button>
+      </div>
+      <div class="step">
+        <div class="done-ico">&#10003;</div>
+        <h2 style="text-align:center">Your lens is on</h2>
+        <p style="text-align:center">The feed is live and will keep sweeping your alerts every five minutes. Tag the first few transactions as they arrive, and the story builds itself.</p>
+      </div>
+    </div>
+    <div class="setup-actions">
+      <button class="btn2" id="setupBack">Back</button>
+      <button class="btn2 pri" id="setupNext">Start</button>
+    </div>
+  </div>
+</section>
+
+<div id="app" class="view">
 <header>
   <div class="logo">MoneyLens<span>personal finance</span></div>
   <div class="month-nav">
@@ -357,7 +503,8 @@ footer::before{content:'';width:8px;height:8px;border-radius:50%;background:var(
 <div id="toast"></div>
 <div id="tip" style="position:fixed;z-index:150;background:rgba(18,23,40,.95);border:1px solid var(--line2);padding:7px 12px;border-radius:99px;font-size:12px;font-weight:600;pointer-events:none;opacity:0;transition:opacity .15s;white-space:nowrap"></div>
 
-<footer>Auto-synced from your Gmail bank alerts &middot; everything stays in this browser</footer>
+<footer>Auto-synced from your Gmail bank alerts &middot; everything stays in this browser &middot; <a class="flink" id="lnkSetup" href="#">setup</a> &middot; <a class="flink" id="lnkHome" href="#">home</a></footer>
+</div>
 
 <script>
 'use strict';
@@ -411,7 +558,7 @@ function qtagHtml(t){
 const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const LS='moneylens_v2';
 
-const SYNC_URL='';
+const SYNC_URL=(function(){try{return localStorage.getItem('ml_feed_url')||'https://script.google.com/macros/s/AKfycbyDzcEWBOMxoSUc4-SlCb2COh8wBX4L6R-_9on50vZrMDXsTyvskTxy_7-mnnDShk9V/exec'}catch(e){return ''}})();
 const SYNC_BATCH='gmail-2026-10-28';
 const SYNC=[
  {id:'d1',type:'income',amount:37360,cat:'salary',date:'2026-09-30',note:'INFLOW TECHNOLOGIES'},
@@ -889,5 +1036,75 @@ document.querySelectorAll('.feature').forEach(el=>io.observe(el));
 addEventListener('scroll',()=>{document.querySelector('header').classList.toggle('scrolled',scrollY>10)},{passive:true});
 setTimeout(()=>{document.querySelectorAll('.feature:not(.in)').forEach(el=>el.classList.add('in'))},2500);
 </script>
+
+<script>
+'use strict';
+(function(){
+  const FEED_DEFAULT='';
+  const SCRIPT_TXT="/** MoneyLens live sync - final build.\n *  Paste over EVERYTHING in the editor, press Ctrl+S, then Run > setup once.\n *  No redeploy needed: the 5-minute trigger always runs the saved code. */\n\nvar FEED_NAME = 'moneylens-sync.json';\nvar KEEP = 1000;\n\nfunction searchQueries_(days) {\n  return [\n    'from:transaction.alerts@idfcfirstbank.com newer_than:' + days + 'd',\n    'from:alerts@hdfcbank.bank.in newer_than:' + days + 'd'\n  ];\n}\n\nfunction setup() {\n  if (ScriptApp.getProjectTriggers().length === 0) {\n    ScriptApp.newTrigger('moneyLensSync').timeBased().everyMinutes(5).create();\n  }\n  moneyLensSync();\n}\n\nfunction moneyLensSync() {\n  var state = readState_();\n  var diag = { at: new Date().toISOString(), mailbox: '', found: {}, added: 0, msgs: 0 };\n  try {\n    diag.mailbox = Session.getEffectiveUser().getEmail();\n    var have = {};\n    state.transactions.forEach(function (t) { have[t.id] = true; });\n    // Full 30-day backfill on the first run, a cheap 2-day sweep after that.\n    var days = state.transactions.length ? 2 : 30;\n    diag.days = days;\n    searchQueries_(days).forEach(function (q, qi) {\n      var ths = GmailApp.search(q, 0, 500);\n      diag.found['query' + (qi + 1)] = ths.length;\n      ths.forEach(function (th) {\n        th.getMessages().forEach(function (m) {\n          diag.msgs++;\n          var id = 'b' + m.getId();\n          if (have[id]) return;\n          var body = '';\n          try { body = m.getPlainBody(); } catch (e) { body = ''; }\n          var tx = null;\n          try { tx = parse_(body, id); } catch (e) {}\n          if (tx) { state.transactions.push(tx); have[id] = true; diag.added++; }\n          else if (!diag.unparsedSample) diag.unparsedSample = String(body).slice(0, 200);\n        });\n      });\n    });\n    if (diag.added > 0) {\n      state.transactions.sort(function (a, b) {\n        return a.date \u003c b.date ? -1 : a.date > b.date ? 1 : 0;\n      });\n      if (state.transactions.length > KEEP) {\n        state.transactions = state.transactions.slice(-KEEP);\n      }\n    }\n  } catch (e) {\n    diag.error = String(e) + (e.lineNumber ? ' (line ' + e.lineNumber + ')' : '');\n  }\n  state.updated = new Date().toISOString();\n  state.diag = diag;\n  writeState_(state);\n}\n\nfunction readState_() {\n  var it = DriveApp.getFilesByName(FEED_NAME);\n  if (it.hasNext()) {\n    try { return JSON.parse(it.next().getBlob().getDataAsString()); } catch (e) {}\n  }\n  return { updated: '', transactions: [] };\n}\n\nfunction writeState_(state) {\n  var body = JSON.stringify(state);\n  var it = DriveApp.getFilesByName(FEED_NAME);\n  if (it.hasNext()) it.next().setContent(body);\n  else DriveApp.createFile(FEED_NAME, body, 'application/json');\n}\n\nfunction doGet() {\n  return ContentService\n    .createTextOutput(JSON.stringify(readState_()))\n    .setMimeType(ContentService.MimeType.JSON);\n}\n\nfunction parse_(raw, id) {\n  // Collapse all whitespace (bank emails wrap amounts onto new lines),\n  // then strip thousands commas.\n  var body = String(raw).replace(/\\s+/g, ' ').replace(/,/g, '');\n  var m;\n  // IDFC credit: \"... credited with INR 37360.00 on 30-09-2026 ... received from INFLOW TECHNOLOGIES\"\n  if ((m = body.match(/credited with INR (\\d+(?:\\.\\d+)?) on (\\d{2})-(\\d{2})-(\\d{4})/))) {\n    var note = 'Income';\n    var sm = body.match(/received from ([^.]{2,60})/);\n    if (sm) note = sm[1].trim();\n    return tx_(id, 'income', m[1], m[4] + '-' + m[3] + '-' + m[2], note);\n  }\n  // IDFC debit: \"... has been debited by INR 398.00 on 25/10/2026 14:03\"\n  if ((m = body.match(/debited by INR (\\d+(?:\\.\\d+)?) on (\\d{2})\\/(\\d{2})\\/(\\d{4})/))) {\n    return tx_(id, 'expense', m[1], m[4] + '-' + m[3] + '-' + m[2], 'IDFC debit');\n  }\n  // HDFC: \"Rs.120 is debited from your account ending 7470 towards VPA *****nupi@apl (Amazon India) on 28-10-26\"\n  if ((m = body.match(/Rs\\.?(\\d+(?:\\.\\d+)?) is debited from your account ending \\d+ towards VPA \\S+\\s*(?:\\(([^)]+)\\))? on (\\d{2})-(\\d{2})-(\\d{2})/))) {\n    var note2 = (m[2] || 'UPI payment').trim();\n    return tx_(id, 'expense', m[1], (Number(m[5]) + 2000) + '-' + m[4] + '-' + m[3], note2);\n  }\n  return null; // OTP, marketing mail, anything else: skipped\n}\n\nfunction tx_(id, type, amount, date, note) {\n  note = String(note).slice(0, 60);\n  return { id: id, type: type, amount: Number(amount), cat: cat_(type, note), date: date, note: note };\n}\n\nfunction cat_(type, note) {\n  if (type === 'income') return /sal|inflow/i.test(note) ? 'salary' : 'otherin';\n  var n = note.toLowerCase();\n  var map = [\n    ['food', /zomato|swiggy|chai|restaurant|cafe|domino|pizza|kfc|starbucks|bar|hotel|dinner|lunch|food/],\n    ['transport', /uber|ola|rapido|irctc|metro|petrol|fuel|indian oil|fastag|parking/],\n    ['shopping', /amazon|flipkart|myntra|zudio|ajio|meesho|nykaa|shop|store|mart|blinkit|zepto|bigbasket/],\n    ['fun', /netflix|hotstar|spotify|prime video|google play|bookmyshow|game|steam/],\n    ['other', /airtel|jio|vodafone|bsnl|electricity|recharge|bill|insurance|rent|emi/]\n  ];\n  for (var i = 0; i \u003c map.length; i++) if (map[i][1].test(n)) return map[i][0];\n  return 'other';\n}\n";
+  const $=id=>document.getElementById(id);
+  const KEY_DONE='ml_setup_done', KEY_URL='ml_feed_url';
+  function show(v){
+    ['landing','setup','app'].forEach(k=>{const e=$(k); if(e)e.classList.toggle('on',k===v)});
+    window.scrollTo(0,0);
+  }
+  let step=1;
+  function goStep(n){
+    step=n;
+    document.querySelectorAll('#setup .step').forEach((el,i)=>el.classList.toggle('on',i+1===n));
+    document.querySelectorAll('.sdot').forEach((el,i)=>el.classList.toggle('on',i+1<=n));
+    $('setupBack').style.visibility=n>1?'visible':'hidden';
+    $('setupNext').textContent = n===1?'Start':n<4?'Continue':'Open MoneyLens';
+  }
+  function saveUrl(){const u=$('feedUrl').value.trim(); if(u){try{localStorage.setItem(KEY_URL,u)}catch(e){}}}
+  function finish(){saveUrl(); try{localStorage.setItem(KEY_DONE,'1')}catch(e){}; location.reload();}
+  function startSetup(){show('setup'); goStep(1);}
+  ['ctaStart','ctaStart2','ctaStart3'].forEach(id=>{const b=$(id); if(b)b.onclick=startSetup;});
+  const nx=$('setupNext');
+  nx.onclick=()=>{ if(step>=4){finish();} else { if(step===3)saveUrl(); goStep(step+1);} };
+  $('setupBack').onclick=()=>{ if(step>1)goStep(step-1); };
+  $('scriptPre').textContent=SCRIPT_TXT;
+  $('copyScript').onclick=async()=>{
+    let ok=true;
+    try{ await navigator.clipboard.writeText(SCRIPT_TXT); }
+    catch(e){ ok=false; }
+    const b=$('copyScript');
+    b.textContent= ok?'Copied \u2713':'Select and copy the code below';
+    setTimeout(()=>{b.textContent='Copy setup script'},2200);
+  };
+  const fu=$('feedUrl');
+  try{ fu.value=localStorage.getItem(KEY_URL)||FEED_DEFAULT; }catch(e){ fu.value=FEED_DEFAULT; }
+  $('testConn').onclick=async()=>{
+    const u=fu.value.trim(), el=$('testMsg');
+    if(!u){el.textContent='Paste the web app URL first.';el.className='testmsg err';return;}
+    el.textContent='Testing\u2026'; el.className='testmsg';
+    try{
+      const r=await fetch(u+'?t='+Date.now());
+      const j=await r.json();
+      const n=(j&&Array.isArray(j.txns))?j.txns.length:'?';
+      el.textContent='Connected \u00b7 '+n+' transactions live'; el.className='testmsg ok';
+    }catch(e){
+      el.textContent="Couldn't reach the feed. Check the URL, and that the deployment allows Anyone.";
+      el.className='testmsg err';
+    }
+  };
+  const lg=document.querySelector('header .logo');
+  if(lg){ lg.style.cursor='pointer'; lg.title='Back to home'; lg.onclick=()=>show('landing'); }
+  const ls=$('lnkSetup'); if(ls)ls.onclick=e=>{e.preventDefault();startSetup();};
+  const lh=$('lnkHome'); if(lh)lh.onclick=e=>{e.preventDefault();show('landing');};
+  function boot(){
+    const q=new URLSearchParams(location.search);
+    const v=(q.get('view')||'').toLowerCase();
+    if(v==='setup'){show('setup');const st=parseInt(q.get('step')||'1');goStep(isNaN(st)?1:Math.min(4,Math.max(1,st)));return;}
+    if(v==='landing'){show('landing');return;}
+    if(v==='app'){show('app');return;}
+    let done=false,url=false;
+    try{ done=!!localStorage.getItem(KEY_DONE); url=!!localStorage.getItem(KEY_URL); }catch(e){}
+    if(done||url) show('app'); else show('landing');
+  }
+  boot();
+})();
+</script>
+
 </body>
 </html>
