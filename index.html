@@ -340,6 +340,7 @@ footer::before{content:'';width:8px;height:8px;border-radius:50%;background:var(
     <h2>Ready to see where the money went?</h2>
     <p>One-time setup, then it runs itself. Your data never leaves this browser.</p>
     <div class="cta-row"><button class="cta" id="ctaStart3">Start setup &rarr;</button></div>
+    <p style="margin-top:14px"><a class="flink" id="skipManual3" href="#">Not connecting email? Jump straight in and track manually</a></p>
   </div>
   <div class="land-foot">MoneyLens &middot; built for the alerts you already get</div>
 </section>
@@ -357,6 +358,7 @@ footer::before{content:'';width:8px;height:8px;border-radius:50%;background:var(
           <li><b>Exact:</b> each alert is filed exactly once, keyed to the email itself.</li>
           <li><b>Yours:</b> the feed is a script in your own Google account. Data stays in this browser.</li>
         </ul>
+        <p style="margin-top:14px"><a class="flink" id="skipManual" href="#">Prefer no email connection? Skip this and track manually &rarr;</a></p>
       </div>
       <div class="step">
         <h2>Create your feed</h2>
@@ -379,6 +381,7 @@ footer::before{content:'';width:8px;height:8px;border-radius:50%;background:var(
         <input class="setup-inp" id="feedUrl" type="url" placeholder="https://script.google.com/macros/s/.../exec">
         <div class="testmsg" id="testMsg"></div>
         <button class="btn2" id="testConn" style="margin-top:6px">Test connection</button>
+        <p style="margin-top:12px"><a class="flink" id="skipManual2" href="#">Skip for now, use manual mode</a></p>
       </div>
       <div class="step">
         <div class="done-ico">&#10003;</div>
@@ -565,7 +568,7 @@ function qtagHtml(t){
 const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const LS='moneylens_v2';
 
-const SYNC_URL=(function(){try{return localStorage.getItem('ml_feed_url')||'https://script.google.com/macros/s/AKfycbyDzcEWBOMxoSUc4-SlCb2COh8wBX4L6R-_9on50vZrMDXsTyvskTxy_7-mnnDShk9V/exec'}catch(e){return ''}})();
+const SYNC_URL=(function(){try{var u=localStorage.getItem('ml_feed_url');if(u)return u;return localStorage.getItem('ml_manual')?'':''}catch(e){return ''}})();
 const SYNC_BATCH='gmail-2026-10-28';
 const SYNC=[
  {id:'d1',type:'income',amount:37360,cat:'salary',date:'2026-09-30',note:'INFLOW TECHNOLOGIES'},
@@ -1064,7 +1067,16 @@ setTimeout(()=>{document.querySelectorAll('.feature:not(.in)').forEach(el=>el.cl
     $('setupNext').textContent = n===1?'Start':n<4?'Continue':'Open MoneyLens';
   }
   function saveUrl(){const u=$('feedUrl').value.trim(); if(u){try{localStorage.setItem(KEY_URL,u)}catch(e){}}}
-  function finish(){saveUrl(); try{localStorage.setItem(KEY_DONE,'1')}catch(e){}; location.reload();}
+  function finish(){saveUrl(); try{localStorage.removeItem('ml_manual');localStorage.setItem(KEY_DONE,'1')}catch(e){}; location.reload();}
+  function finishManual(){try{localStorage.removeItem('ml_feed_url');localStorage.setItem('ml_manual','1');localStorage.setItem(KEY_DONE,'1')}catch(e){}; location.reload();}
+  function manualUI(){
+    if(window.SYNC_URL) return;
+    const b=$('importBtn'); if(b)b.style.display='none';
+    const f=document.querySelector('footer');
+    if(f)f.innerHTML='Manual mode &middot; add transactions as they happen &middot; <a class="flink" id="lnkConnect" href="#">connect bank alerts</a> &middot; <a class="flink" id="lnkHome" href="#">home</a>';
+    const lc=$('lnkConnect'); if(lc)lc.onclick=e=>{e.preventDefault();startSetup();};
+    const lh=$('lnkHome'); if(lh)lh.onclick=e=>{e.preventDefault();show('landing');};
+  }
   function startSetup(){show('setup'); goStep(1);}
   ['ctaStart','ctaStart2','ctaStart3'].forEach(id=>{const b=$(id); if(b)b.onclick=startSetup;});
   const nx=$('setupNext');
@@ -1097,6 +1109,7 @@ setTimeout(()=>{document.querySelectorAll('.feature:not(.in)').forEach(el=>el.cl
   };
   const lg=document.querySelector('header .logo');
   if(lg){ lg.style.cursor='pointer'; lg.title='Back to home'; lg.onclick=()=>show('landing'); }
+  ['skipManual','skipManual2','skipManual3'].forEach(id=>{const a=$(id); if(a)a.onclick=e=>{e.preventDefault();finishManual();};});
   const ls=$('lnkSetup'); if(ls)ls.onclick=e=>{e.preventDefault();startSetup();};
   const lh=$('lnkHome'); if(lh)lh.onclick=e=>{e.preventDefault();show('landing');};
   function boot(){
@@ -1108,6 +1121,7 @@ setTimeout(()=>{document.querySelectorAll('.feature:not(.in)').forEach(el=>el.cl
     let done=false,url=false;
     try{ done=!!localStorage.getItem(KEY_DONE); url=!!localStorage.getItem(KEY_URL); }catch(e){}
     if(done||url) show('app'); else show('landing');
+    manualUI();
   }
   boot();
 })();
