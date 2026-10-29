@@ -654,7 +654,7 @@ function load(){
       }
     }
   }catch(e){}
-  state.tx=SYNC.map(t=>Object.assign({},t));
+  state.tx=SYNC.map(t=>Object.assign({},t,{cat:t.cat||'other',review:!!t.review}));
   state.batches=[SYNC_BATCH];
   save();
 }
