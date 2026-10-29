@@ -574,9 +574,9 @@ const SYNC=[
  {id:'d1',type:'income',amount:37360,cat:'salary',date:'2026-09-30',note:'INFLOW TECHNOLOGIES'},
  {id:'d2',type:'expense',amount:512,cat:'fun',date:'2026-10-01',note:'Google Play X Plus'},
  {id:'d3',type:'expense',amount:398,cat:'shopping',date:'2026-10-03',note:'Zudio'},
- {id:'d4',type:'expense',amount:120,date:'2026-10-05',note:'Amazon Pay'},
+ {id:'d4',type:'expense',amount:120,review:true,date:'2026-10-05',note:'Amazon Pay'},
  {id:'d5',type:'expense',amount:62,cat:'food',date:'2026-10-08',note:'Chai Days'},
- {id:'d6',type:'expense',amount:360,date:'2026-10-11',note:'F Bar'},
+ {id:'d6',type:'expense',amount:360,review:true,date:'2026-10-11',note:'F Bar'},
  {id:'d7',type:'expense',amount:512,cat:'fun',date:'2026-10-31',note:'Google Play X Plus'},
  {id:'d8',type:'expense',amount:638,cat:'shopping',date:'2026-10-12',note:'Shadowfax'},
  {id:'d9',type:'expense',amount:2500,cat:'bills',date:'2026-10-14',note:'Airtel postpaid'},
@@ -635,7 +635,7 @@ function mergeTxns(incoming,quiet,markReview){
   (incoming||[]).forEach(t=>{
     if(!t||!(t.amount>0)||!t.date)return;
     const k=key(t);if(seen.has(k))return;seen.add(k);
-    state.tx.push({id:t.id||uid(),type:t.type||'expense',amount:t.amount,cat:t.cat||'other',date:t.date,note:t.note||'',review:!!markReview});
+    state.tx.push({id:t.id||uid(),type:t.type||'expense',amount:t.amount,cat:t.cat||'other',date:t.date,note:t.note||'',review:t.review!=null?!!t.review:!!markReview});
     added++;
   });
   if(added){renderAll();toast('Synced '+added+' new transaction'+(added===1?'':'s')+' · tag them below')}
@@ -712,7 +712,7 @@ function renderRecurring(){
       +'<button class="chip" data-rx="'+r.amt+'" title="Not recurring">×</button></div>';
   }).join('');
 }
-function renderAll(){renderStats();renderBudgets();renderCharts();renderRecurring();renderList()}
+function renderAll(){[renderStats,renderBudgets,renderCharts,renderRecurring,renderList].forEach(f=>{try{f()}catch(e){console.warn(e)}})}
 
 function countUp(el,target,suffix,pct){
   const start=parseFloat(el.dataset.v||0)||0;el.dataset.v=target;
@@ -741,14 +741,16 @@ function renderStats(){
 
 function setup(c){
   const r=c.getBoundingClientRect(),d=window.devicePixelRatio||1;
+  if(r.width<10||r.height<10){queueRerender();return null}
   c.width=Math.max(1,r.width*d);c.height=Math.max(1,r.height*d);
   const ctx=c.getContext('2d');ctx.setTransform(d,0,0,d,0,0);
   return{ctx,w:r.width,h:r.height};
 }
-function rr(ctx,x,y,w,h,r){r=Math.min(r,w/2,h/2);ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
+function queueRerender(){if(queueRerender._t)return;queueRerender._t=setTimeout(()=>{queueRerender._t=0;try{renderAll()}catch(e){}},260)}
+function rr(ctx,x,y,w,h,r){r=Math.max(0,Math.min(r,w/2,h/2));ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
 
 function spark(id,vals,color,isPct){
-  const c=$(id);if(!c)return;const{ctx,w,h}=setup(c);
+  const c=$(id);if(!c)return;const _s=setup(c);if(!_s)return;const{ctx,w,h}=_s;
   color=color||'#7c5cff';
   const min=Math.min(...vals),max=Math.max(...vals),rng=(max-min)||1,pad=4;
   const pts=vals.map((v,i)=>[pad+i*(w-2*pad)/(vals.length-1||1),h-pad-(v-min)/rng*(h-2*pad)]);
@@ -769,7 +771,7 @@ function renderCharts(){
   $('legInc').textContent=fmtk(inc);$('legExp').textContent=fmtk(exp);
 }
 function drawBars(){
-  const c=$('barChart'),{ctx,w,h}=setup(c);
+  const c=$('barChart');const _s=setup(c);if(!_s)return;const{ctx,w,h}=_s;
   const months=last6(state.ui.month);
   const inc=months.map(k=>sum(t=>mKey(t.date)===k&&t.type==='income'));
   const exp=months.map(k=>sum(t=>mKey(t.date)===k&&t.type==='expense'));
@@ -796,7 +798,7 @@ function drawDonut(){
   const rows=Object.entries(byCat).sort((a,b)=>b[1]-a[1]);
   const total=rows.reduce((a,r)=>a+r[1],0);
   $('donutSub').textContent=monthLabel(key);
-  const{ctx,w,h}=setup(c);const cx=w/2,cy=h/2,R=Math.min(w,h)/2-6,r0=R*.62;
+  const _s=setup(c);if(!_s)return;const{ctx,w,h}=_s;const cx=w/2,cy=h/2,R=Math.min(w,h)/2-6,r0=R*.62;
   window._donut={rows,total,cx,cy,R,r0};
   if(!total){ctx.clearRect(0,0,w,h);$('donutCenter').innerHTML='<div class="sm">no expenses this month 🎉</div>';$('donutLegend').innerHTML='<div class="empty" style="padding:14px">Nothing spent yet</div>';return}
   let a=-Math.PI/2;const slices=[];
@@ -1057,6 +1059,7 @@ setTimeout(()=>{document.querySelectorAll('.feature:not(.in)').forEach(el=>el.cl
   function show(v){
     ['landing','setup','app'].forEach(k=>{const e=$(k); if(e)e.classList.toggle('on',k===v)});
     window.scrollTo(0,0);
+    if(v==='app'&&window.renderAll)requestAnimationFrame(()=>setTimeout(()=>{try{window.renderAll()}catch(e){}},60));
   }
   let step=1;
   function goStep(n){
@@ -1070,7 +1073,7 @@ setTimeout(()=>{document.querySelectorAll('.feature:not(.in)').forEach(el=>el.cl
   function finish(){saveUrl(); try{localStorage.removeItem('ml_manual');localStorage.setItem(KEY_DONE,'1')}catch(e){}; location.reload();}
   function finishManual(){try{localStorage.removeItem('ml_feed_url');localStorage.setItem('ml_manual','1');localStorage.setItem(KEY_DONE,'1')}catch(e){}; location.reload();}
   function manualUI(){
-    if(window.SYNC_URL) return;
+    if(typeof SYNC_URL!=="undefined"&&SYNC_URL) return;
     const b=$('importBtn'); if(b)b.style.display='none';
     const f=document.querySelector('footer');
     if(f)f.innerHTML='Manual mode &middot; add transactions as they happen &middot; <a class="flink" id="lnkConnect" href="#">connect bank alerts</a> &middot; <a class="flink" id="lnkHome" href="#">home</a>';
