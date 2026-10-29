@@ -13,7 +13,7 @@
   --bg:#05070f; --bg2:#0a0f1e;
   --surface:rgba(255,255,255,.045); --surface2:rgba(255,255,255,.08);
   --line:rgba(255,255,255,.08); --line2:rgba(255,255,255,.16);
-  --txt:#eef1f8; --mut:#9aa3b8; --mut2:#6b7490;
+  --txt:#eef1f8; --mut:#abb4ca; --mut2:#828ca8;
   --acc1:#8b7cff; --acc2:#22d3ee; --inc:#34d399; --exp:#fb7185; --warn:#fbbf24;
   --grad:linear-gradient(135deg,#8b7cff 0%,#38bdf8 100%);
   --r:24px; --rs:16px;
@@ -52,7 +52,7 @@ header.scrolled{border-bottom-color:var(--line);background:rgba(5,7,15,.82)}
 .month-nav button:hover{background:var(--surface2);transform:scale(1.06)}
 .month-nav button:active{transform:scale(.94)}
 #monthLabel{font-family:var(--font-d);font-weight:600;font-size:13.5px;min-width:126px;text-align:center;letter-spacing:-.2px}
-.ghost{background:var(--surface);border:1px solid var(--line);color:var(--txt);padding:9px 15px;border-radius:12px;font-weight:600;font-size:13px;cursor:pointer;transition:.22s;font-family:inherit}
+.ghost{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:var(--txt);padding:9px 15px;border-radius:12px;font-weight:600;font-size:13px;cursor:pointer;transition:.22s;font-family:inherit}
 .ghost:hover{background:var(--surface2);border-color:var(--line2);transform:translateY(-1px)}
 .ghost:active{transform:scale(.96)}
 .primary{background:var(--grad);border:0;color:#fff;padding:10px 18px;border-radius:12px;font-weight:700;font-size:13.5px;cursor:pointer;transition:.25s;box-shadow:0 8px 26px rgba(139,124,255,.35);font-family:inherit;white-space:nowrap}
@@ -199,10 +199,10 @@ canvas.chart{width:100%;height:270px;display:block}
 .danger:active{transform:scale(.96)}
 
 /* ---------- toast / fab / footer ---------- */
-#toast{position:fixed;bottom:26px;left:50%;transform:translate(-50%,90px);background:rgba(18,23,40,.92);backdrop-filter:blur(12px);border:1px solid var(--line2);color:var(--txt);padding:13px 22px;border-radius:99px;font-size:13.5px;font-weight:600;z-index:200;transition:.4s cubic-bezier(.34,1.56,.64,1);box-shadow:0 14px 50px rgba(0,0,0,.55);pointer-events:none;display:flex;align-items:center;gap:9px}
+#toast{position:fixed;bottom:26px;left:50%;transform:translate(-50%,90px);background:rgba(18,23,40,.92);backdrop-filter:blur(12px);border:1px solid var(--line2);color:var(--txt);padding:13px 22px;border-radius:99px;font-size:13.5px;font-weight:600;z-index:200;transition:.4s cubic-bezier(.34,1.56,.64,1);box-shadow:0 14px 50px rgba(0,0,0,.55);pointer-events:none;display:flex;align-items:center;gap:9px;opacity:0}
 #toast::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--grad);box-shadow:0 0 12px rgba(139,124,255,.8)}
-#toast.show{transform:translate(-50%,0)}
-.fab{display:none;position:fixed;bottom:26px;right:22px;z-index:60;width:60px;height:60px;border-radius:50%;border:0;background:var(--grad);color:#fff;font-size:27px;cursor:pointer;box-shadow:0 12px 38px rgba(139,124,255,.55);transition:.25s}
+#toast.show{transform:translate(-50%,0);opacity:1}
+.fab{display:none;position:fixed;bottom:calc(26px + env(safe-area-inset-bottom));right:22px;z-index:60;width:60px;height:60px;border-radius:50%;border:0;background:var(--grad);color:#fff;font-size:27px;cursor:pointer;box-shadow:0 12px 38px rgba(139,124,255,.55);transition:.25s}
 .fab:hover{transform:translateY(-3px)}
 .fab:active{transform:scale(.9)}
 footer{max-width:1180px;margin:0 auto;padding:0 clamp(16px,4vw,40px) 44px;color:var(--mut2);font-size:12px;display:flex;gap:8px;align-items:center}
@@ -221,6 +221,9 @@ footer::before{content:'';width:8px;height:8px;border-radius:50%;background:var(
 }
 @media(max-width:560px){
   header{gap:9px;padding:12px 14px}
+  #importBtn{order:1;margin-left:auto}
+  #exportBtn{order:2}
+  #addBtn{display:none}
   .month-nav{order:3;width:100%;justify-content:center;margin-left:0}
   .stat{padding:16px 16px 8px}
   .stat .val{font-size:20px}
@@ -884,6 +887,7 @@ init();
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.06});
 document.querySelectorAll('.feature').forEach(el=>io.observe(el));
 addEventListener('scroll',()=>{document.querySelector('header').classList.toggle('scrolled',scrollY>10)},{passive:true});
+setTimeout(()=>{document.querySelectorAll('.feature:not(.in)').forEach(el=>el.classList.add('in'))},2500);
 </script>
 </body>
 </html>
